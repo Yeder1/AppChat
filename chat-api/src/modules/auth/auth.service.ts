@@ -1,4 +1,4 @@
-import UserSchema from "@core/database/models/UserSchema";
+import { UserSchema } from "@core/database/models";
 import {
   IGetInfoRequest,
   ILoginRequest,
@@ -69,7 +69,7 @@ const login = async (req: ILoginRequest): Promise<ILoginResponse> => {
   }
 };
 
-const getInfo = async (req: IGetInfoRequest) => {
+const getInfo = async (req: IAuthUser) => {
   return await UserSchema.findOne(
     {
       username: req.username,
@@ -86,7 +86,7 @@ const getInfo = async (req: IGetInfoRequest) => {
 const AuthService = {
   register,
   login,
-  getInfo
+  getInfo,
 };
 
 export default AuthService;

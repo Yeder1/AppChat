@@ -1,12 +1,13 @@
 import * as express from "express";
 
 declare global {
+  export interface IAuthUser {
+    id: string;
+    username: string;
+  }
   namespace Express {
     interface Request {
-      user?: {
-        id: string;
-        username: string;
-      };
+      user?: IAuthUser;
     }
   }
 }
