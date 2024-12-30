@@ -11,6 +11,8 @@ const initMongoConnection = async () => {
     },
     authSource: "admin",
   });
+
+  mongoose.set('debug', true);
 };
 
 export default initMongoConnection;

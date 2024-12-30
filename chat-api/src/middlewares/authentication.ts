@@ -1,4 +1,4 @@
-import UserSchema from "@core/database/models/UserSchema";
+import { UserSchema } from "@core/database/models";
 import { HttpError } from "@core/interfaces/http";
 import JwtUtils, { ISignData } from "@core/utils/jwt";
 import { NextFunction, Request, Response } from "express";
