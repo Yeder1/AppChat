@@ -1,5 +1,6 @@
 import 'package:chatapp/dtos/requests/register_request.dart';
 import 'package:chatapp/dtos/responses/api_response.dart';
+import 'package:chatapp/dtos/responses/error_response.dart';
 import 'package:chatapp/screens/login.dart';
 import 'package:chatapp/services/user_service.dart';
 import 'package:flutter/material.dart';
@@ -12,17 +13,17 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final _displayNameController = TextEditingController();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _displayNameController = TextEditingController(text: "quanngu123");
+  final _usernameController = TextEditingController(text: "quanngu123");
+  final _passwordController = TextEditingController(text: "Quan@12345");
+  final _confirmPasswordController = TextEditingController(text: "Quan@12345");
 
   final _userService = UserService(); // Khởi tạo HttpService
   final _formKey = GlobalKey<FormState>();
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) {
-      return; // Nếu không hợp lệ, không thực hiện đăng ký
+      return;
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -41,23 +42,24 @@ class _RegisterState extends State<Register> {
 
     try {
       final response = await _userService.register(request);
-      if (response.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response.message ?? '')),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const Login()),
+      );
+    } catch (e) {
+      if (e is ErrorResponseException) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registration successful!')),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Login()),
+          SnackBar(content: Text('Error: ${e.message}')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response.message ?? 'Registration failed')),
+          SnackBar(content: Text('Error: $e')),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
     }
   }
 
