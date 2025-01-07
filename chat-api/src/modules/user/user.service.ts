@@ -5,20 +5,23 @@ import JwtUtils from "@core/utils/jwt";
 import { StatusCodes } from "http-status-codes";
 import { IGetUserRequest, IGetUserResponse } from "./user.interface";
 
-const getUsers = async (req: IGetUserRequest): Promise<IGetUserResponse[]> => {
+const getUsers = async (req: IGetUserRequest): Promise<IResponse<IGetUserResponse[]>> => {
   try {
     const searchPattern = `.*${req.search}.*`;
-    return await UserSchema.find({
-      $or: [
-        { displayName: { $regex: searchPattern } },
-        { username: { $regex: searchPattern } },
-      ],
-    }, {
-      _id: true,
-      avatar: true,
-      displayName: true,
-      username: true
-    });
+    return {
+      message: "Get users successfully",
+      data: await UserSchema.find({
+        $or: [
+          { displayName: { $regex: searchPattern } },
+          { username: { $regex: searchPattern } },
+        ],
+      }, {
+        _id: true,
+        avatar: true,
+        displayName: true,
+        username: true
+      })
+    }
   } catch (e) {
     throw new HttpError(e);
   }
