@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:chatapp/dtos/requests/register_request.dart';
+import 'package:chatapp/dtos/requests/login_request.dart';
 import 'package:chatapp/dtos/responses/api_response.dart';
 import 'package:chatapp/services/api_constants.dart';
 import 'package:chatapp/services/http_service.dart';
@@ -14,5 +15,14 @@ class UserService {
         body: jsonEncode(request.toJson()),
       );
       return response;
+  }
+
+  Future<ApiResponse> login(LoginRequest request) async {
+    final response = await HttpService.post(
+      '/auth/login',
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(request.toJson()),
+    );
+    return response;
   }
 }
