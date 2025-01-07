@@ -9,9 +9,11 @@ class HttpService {
   static final String baseUrl = ApiConstants.baseUrl;
 
   /// GET request
-  static Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
+  static Future<dynamic> get(String endpoint,
+      {Map<String, String>? headers}) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl$endpoint'), headers: headers);
+      final response =
+          await http.get(Uri.parse('$baseUrl$endpoint'), headers: headers);
       return _handleResponse(response);
     } catch (e) {
       _handleException(e);
@@ -19,7 +21,8 @@ class HttpService {
   }
 
   /// POST request
-  static Future<dynamic> post(String endpoint, {Map<String, String>? headers, dynamic body}) async {
+  static Future<dynamic> post(String endpoint,
+      {Map<String, String>? headers, dynamic body}) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$endpoint'),
@@ -33,7 +36,8 @@ class HttpService {
   }
 
   /// PUT request
-  static Future<dynamic> put(String endpoint, {Map<String, String>? headers, dynamic body}) async {
+  static Future<dynamic> put(String endpoint,
+      {Map<String, String>? headers, dynamic body}) async {
     try {
       final response = await http.put(
         Uri.parse('$baseUrl$endpoint'),
@@ -47,9 +51,11 @@ class HttpService {
   }
 
   /// DELETE request
-  static Future<dynamic> delete(String endpoint, {Map<String, String>? headers}) async {
+  static Future<dynamic> delete(String endpoint,
+      {Map<String, String>? headers}) async {
     try {
-      final response = await http.delete(Uri.parse('$baseUrl$endpoint'), headers: headers);
+      final response =
+          await http.delete(Uri.parse('$baseUrl$endpoint'), headers: headers);
       return _handleResponse(response);
     } catch (e) {
       _handleException(e);
@@ -59,17 +65,14 @@ class HttpService {
   /// Handles HTTP response and parses JSON
   static ApiResponse _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return ApiResponse.fromJson(
-        jsonDecode(response.body),
-            (_) => null,
-      );
+      return ApiResponse.fromJson(jsonDecode(response.body));
     } else {
       throw HttpException(response.body);
     }
   }
 
-  static dynamic _handleException(dynamic error){
-    if(error is HttpException){
+  static dynamic _handleException(dynamic error) {
+    if (error is HttpException) {
       throw ErrorResponseException.fromJson(jsonDecode(error.message));
     }
     throw ErrorResponseException(code: 500, message: error.toString());

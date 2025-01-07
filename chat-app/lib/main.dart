@@ -1,4 +1,5 @@
 import 'package:chatapp/screens/home.dart';
+import 'package:chatapp/screens/login.dart';
 import 'package:chatapp/screens/register.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Register(),
+      home: Login(),
     );
   }
 }
