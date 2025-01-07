@@ -40,7 +40,7 @@ const register = async (req: IRegisterRequest): Promise<IResponse<string>> => {
   }
 };
 
-const login = async (req: ILoginRequest): Promise<ILoginResponse> => {
+const login = async (req: ILoginRequest): Promise<IResponse<ILoginResponse>> => {
   try {
     const foundUser = await UserSchema.findOne({
       username: req.username,
@@ -60,9 +60,13 @@ const login = async (req: ILoginRequest): Promise<ILoginResponse> => {
     }
 
     return {
-      jwtToken: JwtUtils.sign({
-        username: foundUser.username,
-      }),
+      message: "Login successfully!",
+      data: {
+
+        jwtToken: JwtUtils.sign({
+          username: foundUser.username,
+        }),
+      },
     };
   } catch (e) {
     throw new HttpError(e);
