@@ -4,6 +4,15 @@ export interface IGetListConversationRequest {
   authUser: IAuthUser;
 }
 
+export interface IGetListConversationResponse {
+  _id: string;
+  name: string;
+  isSeen: boolean;
+  lastMessage: Partial<IMessage>;
+  isGroup: boolean;
+  paticipants: IPaticipant[];
+}
+
 export interface IStartConversationRequest {
   name: string;
   userIds: string[];
@@ -64,4 +73,9 @@ export interface IChatToConversationResponse {
   content: string;
   sender: IPaticipant;
   createdAt: Date;
-}
+};
+
+export interface IUpdateSeenMessage {
+  conversationId: string;
+  authUser: IAuthUser;
+};

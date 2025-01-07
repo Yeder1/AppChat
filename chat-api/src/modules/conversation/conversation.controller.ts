@@ -66,4 +66,20 @@ const chatToConversation = async (
   }
 }
 
-export { startConversation, detailConversation, chatToConversation, getListConversation };
+const updateSeenMessageOfConversation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await ConversationService.updateSeenMessageOfConversation({
+      conversationId: req.params.conversationId,
+      authUser: req.user!,
+    });
+    res.status(StatusCodes.OK).send(data);
+  } catch (e) {
+    next(e);
+  }
+}
+
+export { startConversation, detailConversation, chatToConversation, getListConversation, updateSeenMessageOfConversation };

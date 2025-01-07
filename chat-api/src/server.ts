@@ -5,19 +5,31 @@ import initServerRoutes from "@routes";
 import initMongoConnection from "@core/database";
 import authenticationMiddleware from "@middlewares/authentication";
 import errorHandler from "@middlewares/error-handler";
+import { createServer } from "http";
+import cors from 'cors'
+import SocketService from "@modules/socket/socket.service";
+const app: Express = express();
+const server = createServer(app);
 
-const server: Express = express();
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: false }));
-const initServerAsyncTask = async () => {
-  initServerRoutes(server);
-  server.use(authenticationMiddleware);
-  server.use(errorHandler);
+const startUp = async () => {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
   
+  app.use(cors({
+    origin: ENV.ALLOWED_ORIGINS,
+    methods: ENV.ALLOWED_METHODS,
+    credentials: true
+  }))
+  initServerRoutes(app);
+  app.use(authenticationMiddleware);
+  app.use(errorHandler);
+
   await initMongoConnection();
+
+  await SocketService.initSocket(server);
 };
 
-initServerAsyncTask()
+startUp()
   .then(() => {
     const port = ENV.PORT;
     server.listen(port, () => {
